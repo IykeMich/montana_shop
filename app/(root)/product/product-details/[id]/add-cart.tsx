@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast';
-import { addItem, CartItem } from '@/store/cartSlice';
+import { addItem } from '@/store/cartSlice';
 import { Product } from '@/typing';
 import React from 'react'
 import { useDispatch } from 'react-redux';

@@ -7,7 +7,7 @@ import {
 } from "@paypal/react-paypal-js";
 
 interface PaypalButtonProps {
-  amount: String;
+  amount: string;
   onSuccess: (details: any) => void;
 }
 
