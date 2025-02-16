@@ -25,6 +25,7 @@ const ProductCard = ({ product }: Props) => {
       toast ({
         description:"Item Added to Cart",
         variant: 'success',
+        duration: 2000,
       })
       dispatch(addItem(product))
     };

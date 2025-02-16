@@ -14,7 +14,8 @@ const AddToCart = ({ product }:{product:Product}) => {
   const addCartHandler = () => {
     toast ({
       description: "Item Added to the cart",
-      variant: "success"
+      variant: "success",
+      duration: 2000,
     })
     dispatch(addItem(product))
   }
