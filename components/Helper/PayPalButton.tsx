@@ -1,59 +1,15 @@
-// import React from "react";
-// import {
-//   FUNDING,
-//   PayPalButtons,
-//   PayPalScriptProvider,
-// } from "@paypal/react-paypal-js";
-
-// interface PaypalButtonProps {
-//   amount: string;
-//   onSuccess: (details: any) => void;
-// }
-
-// const PayPalButton = ({ amount, onSuccess }: PaypalButtonProps) => {
-//   return (
-//     <PayPalScriptProvider
-//       options={{
-//         clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
-//         currency: "USD",
-//       }}
-//     >
-//       <PayPalButtons fundingSource={FUNDING.PAYPAL} 
-//       createOrder={(data,actions) => {
-//         return actions.order.create({
-//           purchase_units:[
-//             {
-//               amount: {
-//                 value:amount
-//               }
-//             }
-//           ]
-//         })
-//       }} 
-//       onApprove = {(data,actions) => {
-//         return actions.order.capture().then((details) => {
-//           onSuccess(details)
-//         })
-//       }}
-      
-//       />
-
-//     </PayPalScriptProvider>
-//   );
-// };
-
-// export default PayPalButton;
-
+// PayPalButton.tsx
 import React from "react";
 import {
   FUNDING,
   PayPalButtons,
   PayPalScriptProvider,
 } from "@paypal/react-paypal-js";
+import { OnApproveData, OrderResponseBody } from "@paypal/paypal-js";
 
 interface PaypalButtonProps {
-  amount: string;
-  onSuccess: (details: any) => void;
+  amount: string; // PayPal requires a string amount
+  onSuccess: (details: OrderResponseBody) => void;
 }
 
 const PayPalButton: React.FC<PaypalButtonProps> = ({ amount, onSuccess }) => {
@@ -66,20 +22,22 @@ const PayPalButton: React.FC<PaypalButtonProps> = ({ amount, onSuccess }) => {
     >
       <PayPalButtons
         fundingSource={FUNDING.PAYPAL}
-        createOrder={(data, actions) => {
+        createOrder={(_, actions) => {
           return actions.order.create({
+            intent: "CAPTURE", // Required by PayPal
             purchase_units: [
               {
                 amount: {
+                  currency_code: "USD",
                   value: amount,
                 },
               },
             ],
           });
         }}
-        onApprove={(data, actions) => {
+        onApprove={(_: OnApproveData, actions) => {
           if (!actions.order) return Promise.reject();
-          return actions.order.capture().then((details) => {
+          return actions.order.capture().then((details: OrderResponseBody) => {
             onSuccess(details);
           });
         }}
